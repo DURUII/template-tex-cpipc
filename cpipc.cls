@@ -39,8 +39,10 @@
     bookmarksnumbered=true,
     bookmarksopen=true,
     colorlinks=false,
-    pdfborder={0 0 0},
-    allcolors=black,
+    pdfborder={0 0 1},
+    linkbordercolor={0 0 1},
+    citebordercolor={1 0 0},
+    urlbordercolor={0 1 0},
     breaklinks=true
 }
 
@@ -99,8 +101,10 @@
 %% Page style setup
 \pagestyle{fancy}
 \fancyhf{} % clear
-\chead{\cpipc@tokens@title} % 页眉居中显示项目名称
-\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt} % 页眉横线
+\renewcommand{\footrulewidth}{0pt} % 移除页脚线
+\chead{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{12.6pt}\selectfont\cpipc@tokens@title} % 页眉居中显示项目名称，宋体五号
+\cfoot{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{12.6pt}\selectfont\thepage} % 页脚居中，宋体五号
 
 % Redefine \maketitle command (similar to cumcmthesis)
 \renewcommand{\maketitle}{\par
@@ -124,97 +128,127 @@
 
 \def\@maketitle{%
   \newpage
-  \null
-  \thispagestyle{empty}
-  % Title page layout matching figure 2
-  \vspace*{5\baselineskip}
+  % 首页特殊边距设置：上1.50cm，下1.75cm
+  \newgeometry{top=1.50cm,bottom=1.75cm,left=3.17cm,right=3.17cm}
+  \thispagestyle{plain} % 首页有页脚但无页眉
+  \fancypagestyle{plain}{%
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \cfoot{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{12.6pt}\selectfont\thepage}
+  }
+  
+  % 从页面顶部空4行开始
+  \vspace*{4\baselineskip}
   \begin{center}
-    % Competition title
-    {\CJKfamily{\AI@CJKMain}\fontsize{16pt}{24pt}\selectfont\bfseries \cpipc@competition@title\par}
-    \vspace{8\baselineskip}
+    % 第七届中国研究生人工智能创新大赛：方正小标宋简体 二号 加粗 行距1.25倍
+    {\TitleCJK\fontsize{22pt}{27.5pt}\selectfont\bfseries \cpipc@competition@title\par}
     
-    % Project title area
-    {\CJKfamily{\AI@CJKMain}\fontsize{14pt}{21pt}\selectfont\bfseries [\cpipc@tokens@title]\par}
-    \vspace{2\baselineskip}
+    % 空10行
+    \vspace{10\baselineskip}
     
-    % Project document text
-    {\CJKfamily{\AI@CJKMain}\fontsize{14pt}{21pt}\selectfont\bfseries 项目文档\par}
+    % [项目名称]：times、宋体 小二 加粗 行距1.25
+    {\setmainfont{\AI@LatinMain}\CJKfamily{\AI@CJKMain}\fontsize{18pt}{22.5pt}\selectfont\bfseries [\cpipc@tokens@title]\par}
+    
+    % 空1行
     \vspace{1\baselineskip}
     
-    % Additional info
-    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont 版本号码：\cpipc@tokens@version\par}
-    \vspace{0.5\baselineskip}
+    % 项目文档：宋体 小二 加粗 行距1.25
+    {\CJKfamily{\AI@CJKMain}\fontsize{18pt}{22.5pt}\selectfont\bfseries 项目文档\par}
     
-    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont [\cpipc@tokens@teamname]\par}
-    \vspace{0.3\baselineskip}
+    % 空0行
+    % 版本号码：times、宋体 小四 加粗 行距1.25
+    {\setmainfont{\AI@LatinMain}\CJKfamily{\AI@CJKMain}\fontsize{12pt}{15pt}\selectfont\bfseries 版本号码：\cpipc@tokens@version\par}
     
-    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont [\cpipc@tokens@category]\par}
+    % 空0行
+    % [YYYY.MM.DD]、[团队名称]、[参赛组别]：times、宋体 小四 加粗 行距1.25 前3行中0行
+    {\setmainfont{\AI@LatinMain}\CJKfamily{\AI@CJKMain}\fontsize{12pt}{15pt}\selectfont\bfseries [\cpipc@tokens@teamname]\par}
+    {\setmainfont{\AI@LatinMain}\CJKfamily{\AI@CJKMain}\fontsize{12pt}{15pt}\selectfont\bfseries [\cpipc@tokens@category]\par}
   \end{center}
   \vfill
   \clearpage
+  \restoregeometry % 恢复正常页面边距
 }
 
-%% TOC styling (参考cumcmthesis)
+%% TOC styling 
+% 目录标题：宋体 二号 行距2.4
+\renewcommand{\cfttoctitlefont}{\hfill\CJKfamily{\AI@CJKMain}\fontsize{22pt}{28.8pt}\selectfont\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\setlength{\cftaftertoctitleskip}{12pt} % 控制标题后间距
+
+% 目录内容：中文宋体 别的times 五号 1级标题加粗 1.1级不加粗 单倍行距
 \renewcommand{\cftsecdotsep}{4.5}
-\setlength{\cftbeforesecskip}{7pt}
-\setlength{\cftbeforesubsecskip}{3pt}
-\renewcommand{\cftsecfont}{\bfseries\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{14pt}\selectfont}
+\setlength{\cftbeforesecskip}{3pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+% 一级标题：宋体五号加粗
+\renewcommand{\cftsecfont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont\bfseries}
+\renewcommand{\cftsecpagefont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont\bfseries}
+% 二级标题：宋体五号不加粗
+\renewcommand{\cftsubsecfont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont}
+\renewcommand{\cftsubsecpagefont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsecaftersnumb}{\hskip.4em}
 
-%% 简化的目录命令
+%% 目录命令
 \newcommand{\makemycontents}{%
+  \thispagestyle{fancy} % 确保目录页有页眉
   \tableofcontents
   \clearpage
 }
 
 %% Change history section
-%% 记录更改历史：宋体 三号 加粗 居中 行距单倍
+%% 记录更改历史：宋体 三号 加粗 居中
 \newcommand{\changehistory}{%
   \thispagestyle{fancy}% 记录更改历史页有页眉页脚
-  \setstretch{1.0}
-  {\centering \CJKfamily{\AI@CJKMain}\fontsize{16.0pt}{20pt}\selectfont \bfseries 记录更改历史\par}
-  \vspace{12pt}
-  % 表格样式：全线表 0.5磅 宋体 五号 居中；表头加粗 居中 段前段后1.54 单倍行距
-  \setlength{\arrayrulewidth}{0.5pt}
-  \renewcommand{\arraystretch}{1.35}
+  % 标题：宋体 三号 加粗 居中
   \begin{center}
-  % 使用tabularx实现表格宽度铺满页面并按内容自适应
+  {\CJKfamily{\AI@CJKMain}\fontsize{16pt}{16pt}\selectfont\bfseries 记录更改历史}
+  \end{center}
+  \vspace{12pt}
+  % 表格：全线表 0.5磅 宋体 五号 居中；表头加粗 居中 段前段后1.54 单倍行距
+  \setlength{\arrayrulewidth}{0.5pt}
+  \renewcommand{\arraystretch}{1.0}
+  \begin{center}
+  \vspace{1.54pt}
   \begin{tabularx}{\textwidth}{|c|X|c|c|c|c|}
   \hline
-  \multicolumn{1}{|c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 序号} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 更改原因} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 版本} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 作者} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 更改日期} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 备注} \\ \hline
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 1 &
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 初始化 &
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont V0.1 &
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 张三 &
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 2025.08.27 &
-  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont — \\ \hline
+  % 表头：宋体 五号 加粗 居中
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 序号 &
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 更改原因 &
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 版本 &
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 作者 &
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 更改日期 &
+  \CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{10.5pt}\selectfont 备注 \\ \hline
+  % 表格内容：宋体 五号 居中
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont 1 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont 初始化 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont V0.1 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont 张三 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont 2025.08.27 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{10.5pt}\selectfont — \\ \hline
   \end{tabularx}
+  \vspace{1.54pt}
   \end{center}
   \clearpage
 }
 
 %% Headings for 正文
-%% 1 项目概况：宋体 三号 加粗 一级大纲 不缩进 行距1.5
-\titleformat{\section}{\setstretch{1.5}\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{24pt}\selectfont}{\thesection}{0.8em}{}[\vspace{-12pt}]
+% 1 项目概况：宋体 三号 加粗 一级大纲 不缩进 行距1.5
+\titleformat{\section}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{24pt}\selectfont}{\thesection}{0.8em}{}
 \titlespacing*{\section}{0pt}{12pt}{6pt}
 
-%% 1.1 背景和基础：宋体 四号 加粗 二级大纲 不缩进 行距1.5
-\titleformat{\subsection}{\setstretch{1.5}\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{21pt}\selectfont}{\thesubsection}{0.6em}{}[\vspace{-12pt}]
+% 1.1 背景和基础：宋体 四号 加粗 二级大纲 不缩进 行距1.5  
+\titleformat{\subsection}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{21pt}\selectfont}{\thesubsection}{0.6em}{}
 \titlespacing*{\subsection}{0pt}{12pt}{6pt}
-
-%% 正文样式已移除，使用标准LaTeX命令
 
 %% Helper to switch page numbering after 3 pages
 \newcounter{cpipc@frontpages}\setcounter{cpipc@frontpages}{3}
 \AtBeginDocument{%
   \pagenumbering{Roman}% 前三页使用大写罗马数字
   \setcounter{page}{1}% 从I开始
+  % 设置正文基本格式：宋体 五号 正文 两端对齐 行距1.5
+  \CJKfamily{\AI@CJKMain}
+  \fontsize{10.5pt}{15.75pt}\selectfont
+  \setstretch{1.5}
 }
 \newcommand{\startmain}{%
   \clearpage
@@ -235,5 +269,7 @@
 %% Paragraph indent etc.
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0pt}
+% 确保所有段落都缩进，包括首段
+\RequirePackage{indentfirst}
 
 %% End of class
