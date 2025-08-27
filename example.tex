@@ -1,0 +1,77 @@
+
+% example.tex — 示例
+\documentclass{cpipc}
+% 若系统没有方正小标宋简体，请取消下一行注释以回退到宋体：
+% \PassOptionsToClass{titlecjkfont=SimSun}{ai-innovation}
+
+\setprojectname{示例项目}
+\setversion{V1.0}
+\setprojectdate{2025.08.27}
+\setteam{某某大学AI实验室}
+\setcategory{创新应用组}
+
+\begin{document}
+
+% 封面（前三页采用罗马数字编号）
+\maketitlepage
+
+% 目录页
+\makemycontents
+
+% 记录更改历史页
+\changehistory
+
+% 从此处开始切换为阿拉伯数字页码
+\startmain
+
+% 正文
+{\SectionHeading\section{项目概况}}
+
+{\SubsectionHeading\subsection{背景和基础}}
+{\BodyText
+简单阐述项目起因和已有工作基础，包括项目灵感、团队构成等。英文/Latin 内容将自动使用 Times New Roman。
+}
+
+{\SubsectionHeading\subsection{场景和价值}}
+{\BodyText
+简单阐述该项目适用的应用场景及潜在社会价值，包括市场调研、对比性分析等。
+}
+
+{\SubsectionHeading\subsection{所需支持}}
+{\BodyText
+请阐述项目实施过程中所需支持，如算力、硬件、相关培训等。
+}
+
+{\SectionHeading\section{项目规划}}
+{\SubsectionHeading\subsection{整体目标}}
+{\BodyText
+简单阐述参赛期间本项目的整体目标，比如可展示原型系统、在行业中初步验证等。
+}
+
+{\SubsectionHeading\subsection{技术创新点}}
+{\BodyText
+通过相关技术对比调研，简单阐述项目的主要技术创新点。
+}
+
+{\SectionHeading\section{实施方案}}
+{\SubsectionHeading\subsection{技术可行性分析}}
+{\BodyText
+请阐述数据采集、行业知识获取，以及算力、硬件支持等可行性分析。
+}
+
+{\SubsectionHeading\subsection{技术细节}}
+{\BodyText
+请阐述相关技术细节，并结合可行性分析对核心技术进行论证及预期技术指标。
+}
+
+{\SubsectionHeading\subsection{计划和分工}}
+{\BodyText
+结合参赛时间点，简单阐述本项目的整体计划和团队分工。
+}
+
+{\SectionHeading\section{参考资料}}
+{\BodyText
+按规范列出参考文献条目。
+}
+
+\end{document}
