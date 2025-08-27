@@ -18,8 +18,10 @@
 \RequirePackage{array}
 \RequirePackage{longtable}
 \RequirePackage{booktabs}
+\RequirePackage{tabularx}
 \RequirePackage{hyperref}
 \hypersetup{colorlinks=false, pdfborder={0 0 0}}
+\RequirePackage{ragged2e}
 
 %% Geometry: 页边距：上2.54 下2.54 左3.17 右3.17 cm
 \geometry{top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm,headheight=14pt,headsep=12pt,footskip=18pt}
@@ -62,39 +64,45 @@
 \newcommand{\setprojectname}[1]{\renewcommand{\ProjectName}{#1}}
 \newcommand{\setversion}[1]{\renewcommand{\ProjectVersion}{#1}}
 \newcommand{\setprojectdate}[1]{\renewcommand{\ProjectDate}{#1}}
-\newcommand{\setteam}[#1]{\renewcommand{\TeamName}{#1}}
+\newcommand{\setteam}[1]{\renewcommand{\TeamName}{#1}}
 \newcommand{\setcategory}[1]{\renewcommand{\CategoryName}{#1}}
 \newcommand{\setcompetitionname}[1]{\renewcommand{\CompetitionName}{#1}}
 
 %% Footer: page numbers — 前三页罗马数字，后面阿拉伯数字
+%% Header: 项目名称
 \pagestyle{fancy}
 \fancyhf{} % clear
+\chead{\ProjectName} % 页眉居中显示项目名称
 \cfoot{\thepage}
 
 %% Title page generator
 \newcommand{\maketitlepage}{%
-  \thispagestyle{plain}% ensure page number style
+  \thispagestyle{empty}% 首页无页眉页脚
   % 页面上边距1.50cm、下边距1.75cm 起始位置控制（相对版心）
-  \vspace*{-1.04cm}% Adjust so the first block approx lands at (2.54-1.50)=1.04cm upwards from current top; tune visually
+  \newgeometry{top=1.50cm,bottom=1.75cm,left=3.17cm,right=3.17cm}% 首页特殊边距
+  \vspace*{4\baselineskip}% 和最上面空4行
   \begin{center}
     \AI@linespaceonetwofive
-    {\TitleCJK\fontsize{22.0pt}{27.5pt}\selectfont\bfseries \CompetitionName\par}% 方正小标宋简体 二号 加粗 行距1.25倍 4行
-    \vspace{3\baselineskip}
-    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries [\ProjectName]\par}% [项目名称] 宋体/Times 小二 加粗 行距1.25 10行
-    \vspace{9\baselineskip}
-    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries 项目文档\par}% 宋体 小二 加粗 1行
-    \vspace{1\baselineskip}
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\ProjectVersion]\par}% Times/宋体 小四 加粗
-    \vspace{0.5\baselineskip}
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\ProjectDate]\quad [\TeamName]\quad [\CategoryName]\par}% 小四 加粗
+    {\TitleCJK\fontsize{22.0pt}{27.5pt}\selectfont\bfseries \CompetitionName\par}% 方正小标宋简体 二号 加粗 行距1.25倍
+    \vspace{10\baselineskip}% 空10行
+    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries [\ProjectName]\par}% [项目名称] Times、宋体 小二 加粗 行距1.25
+    \vspace{1\baselineskip}% 空1行
+    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries 项目文档\par}% 宋体 小二 加粗 行距1.25
+    \vspace{0pt}% 空0行
+    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries 版本号码：[\ProjectVersion]\par}% Times、宋体 小四 加粗 行距1.25
+    \vspace{0pt}% 空0行
+    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\ProjectDate]\par}% 前3行中空0行
+    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\TeamName]\par}
+    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\CategoryName]\par}
   \end{center}
-  \vspace*{0pt}
   \clearpage
+  \restoregeometry% 恢复正常页面边距
 }
 
 %% TOC styling
 %% "目录" 标题：宋体 二号 行距2.4
 \newcommand{\makemycontents}{%
+  \thispagestyle{fancy}% 目录页有页眉页脚
   \AI@linespacetwofour
   {\centering \CJKfamily{\AI@CJKMain}\fontsize{22.0pt}{26pt}\selectfont 目录\par}
   \vspace{0.8\baselineskip}
@@ -110,16 +118,18 @@
 }
 
 %% Change history section
-%% 记录更改历史：宋体 三号 加粗 悬挂缩进1.56 行距单倍
+%% 记录更改历史：宋体 三号 加粗 居中 行距单倍
 \newcommand{\changehistory}{%
+  \thispagestyle{fancy}% 记录更改历史页有页眉页脚
   \AI@linespaceone
-  {\noindent\hangindent=1.56cm \CJKfamily{\AI@CJKMain}\fontsize{16.0pt}{20pt}\selectfont \bfseries 记录更改历史\par}
-  \vspace{6pt}
+  {\centering \CJKfamily{\AI@CJKMain}\fontsize{16.0pt}{20pt}\selectfont \bfseries 记录更改历史\par}
+  \vspace{12pt}
   % 表格样式：全线表 0.5磅 宋体 五号 居中；表头加粗 居中 段前段后1.54 单倍行距
   \setlength{\arrayrulewidth}{0.5pt}
   \renewcommand{\arraystretch}{1.35}
   \begin{center}
-  \begin{tabular}{|p{2.5cm}|p{5cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
+  % 使用tabularx实现表格宽度铺满页面并按内容自适应
+  \begin{tabularx}{\textwidth}{|c|X|c|c|c|c|}
   \hline
   \multicolumn{1}{|c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 序号} &
   \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 更改原因} &
@@ -127,37 +137,43 @@
   \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 作者} &
   \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 更改日期} &
   \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{10.5pt}{13pt}\selectfont 备注} \\ \hline
-  \multicolumn{1}{|c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 1} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 初始化} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont V0.1} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 张三} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 2025.08.27} &
-  \multicolumn{1}{c|}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont —} \\ \hline
-  \end{tabular}
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 1 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 初始化 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont V0.1 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 张三 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont 2025.08.27 &
+  \CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{13pt}\selectfont — \\ \hline
+  \end{tabularx}
   \end{center}
   \clearpage
 }
 
 %% Headings for 正文
-%% 1 项目概况：宋体 三号 加粗 一级大纲 悬挂缩进1.76 行距1.5
-\titleformat{\section}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{20pt}\selectfont}{\thesection}{0.8em}{}
-\titlespacing*{\section}{0pt}{6pt}{6pt}
-\newcommand{\SectionHeading}{\par\noindent\hangindent=1.76cm\AI@linespaceonefive}
+%% 1 项目概况：宋体 三号 加粗 一级大纲 不缩进 行距1.5
+\titleformat{\section}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{24pt}\selectfont}{\thesection}{0.8em}{}[\vspace{-12pt}]
+\titlespacing*{\section}{0pt}{12pt}{6pt}
 
-%% 1.1 背景和基础：宋体 四号 加粗 悬挂缩进1.02 行距1.5
-\titleformat{\subsection}{\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{18pt}\selectfont}{\thesubsection}{0.6em}{}
-\titlespacing*{\subsection}{0pt}{6pt}{6pt}
-\newcommand{\SubsectionHeading}{\par\noindent\hangindent=1.02cm\AI@linespaceonefive}
+%% 1.1 背景和基础：宋体 四号 加粗 二级大纲 不缩进 行距1.5
+\titleformat{\subsection}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{21pt}\selectfont}{\thesubsection}{0.6em}{}[\vspace{-12pt}]
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
 
 %% 正文：宋体 五号 正文 两端对齐 行距1.5
-\newcommand{\BodyText}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{16pt}\selectfont\AI@linespaceonefive}
+\newcommand{\BodyText}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont\justifying}
+
+%% 段落缩进控制：第一段不缩进，后续段落缩进
+\newcommand{\FirstParagraph}{\noindent}
+\newcommand{\NextParagraph}{\par\indent}
 
 %% Helper to switch page numbering after 3 pages
 \newcounter{AI@frontpages}\setcounter{AI@frontpages}{3}
-\AtBeginDocument{\pagenumbering{roman}}
+\AtBeginDocument{%
+  \pagenumbering{roman}% 前三页使用罗马数字
+  \setcounter{page}{1}% 从i开始
+}
 \newcommand{\startmain}{%
   \clearpage
-  \pagenumbering{arabic}% start from 1 by default
+  \pagenumbering{arabic}% 正文开始使用阿拉伯数字
+  \setcounter{page}{1}% 重新从1开始
 }
 
 %% Ensure TOC fonts are CJK/TNR mixed via main font settings (xeCJK takes care of CJK vs Latin)
