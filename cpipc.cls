@@ -1,12 +1,12 @@
 
-%% ai-innovation.cls — XeLaTeX class for 第七届中国研究生人工智能创新大赛 项目文档
+%% cpipc.cls — XeLaTeX class for 第七届中国研究生人工智能创新大赛
 %% Requires: xelatex, fontspec, xeCJK
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ai-innovation}[2025/08/27 v1.0 Project doc class]
+\ProvidesClass{cpipc}[2025/01/10 v1.0 CPIPC Competition Template]
 
 \LoadClass[a4paper,12pt]{article}
 
-%% Packages
+%% Packages (based on cumcmthesis)
 \RequirePackage{fontspec}
 \RequirePackage{xeCJK}
 \RequirePackage{geometry}
@@ -19,9 +19,30 @@
 \RequirePackage{longtable}
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
+\RequirePackage{multirow}
+\RequirePackage{bigstrut}
+\RequirePackage{bigdelim}
+\RequirePackage{ulem}
+\RequirePackage{calc}
 \RequirePackage{hyperref}
-\hypersetup{colorlinks=false, pdfborder={0 0 0}}
-\RequirePackage{ragged2e}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+
+%% Hyperref setup
+\hypersetup{%
+    pdfstartview=FitH,
+    CJKbookmarks=true,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    colorlinks=false,
+    pdfborder={0 0 0},
+    allcolors=black,
+    breaklinks=true
+}
 
 %% Geometry: 页边距：上2.54 下2.54 左3.17 右3.17 cm
 \geometry{top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm,headheight=14pt,headsep=12pt,footskip=18pt}
@@ -52,67 +73,97 @@
 \newcommand{\AI@linespaceonefive}{\setstretch{1.5}}
 \newcommand{\AI@linespacetwofour}{\setstretch{2.4}}
 
-%% User-settable meta
-\newcommand{\ProjectName}{项目名称}
-\newcommand{\ProjectVersion}{V0.1}
-\newcommand{\ProjectDate}{YYYY.MM.DD}
-\newcommand{\TeamName}{团队名称}
-\newcommand{\CategoryName}{参赛组别}
-\newcommand{\CompetitionName}{第七届中国研究生人工智能创新大赛}
+%% Token definitions (similar to cumcmthesis)
+\newcommand\cpipc@tokens@title{}
+\newcommand*\cpipc@tokens@version{}
+\newcommand*\cpipc@tokens@teamname{}
+\newcommand*\cpipc@tokens@category{}
 
-%% Interfaces for user
-\newcommand{\setprojectname}[1]{\renewcommand{\ProjectName}{#1}}
-\newcommand{\setversion}[1]{\renewcommand{\ProjectVersion}{#1}}
-\newcommand{\setprojectdate}[1]{\renewcommand{\ProjectDate}{#1}}
-\newcommand{\setteam}[1]{\renewcommand{\TeamName}{#1}}
-\newcommand{\setcategory}[1]{\renewcommand{\CategoryName}{#1}}
-\newcommand{\setcompetitionname}[1]{\renewcommand{\CompetitionName}{#1}}
+%% User interfaces for setting tokens
+\renewcommand*\title[1]{\renewcommand{\cpipc@tokens@title}{#1}}
+\newcommand*\version[1]{\renewcommand{\cpipc@tokens@version}{#1}}
+\newcommand*\teamname[1]{\renewcommand{\cpipc@tokens@teamname}{#1}}
+\newcommand*\category[1]{\renewcommand{\cpipc@tokens@category}{#1}}
 
-%% Footer: page numbers — 前三页罗马数字，后面阿拉伯数字
-%% Header: 项目名称
+%% Competition title
+\newcommand*{\cpipc@competition@title}{第七届中国研究生人工智能创新大赛}
+
+%% Chinese title names (similar to cumcmthesis)
+\newcommand*{\cpipc@cap@contentsname}{目录}
+\newcommand*{\cpipc@cap@refname}{参考文献}
+
+%% Set Chinese names
+\renewcommand\contentsname{\cpipc@cap@contentsname}
+\renewcommand\refname{\cpipc@cap@refname}
+
+%% Page style setup
 \pagestyle{fancy}
 \fancyhf{} % clear
-\chead{\ProjectName} % 页眉居中显示项目名称
+\chead{\cpipc@tokens@title} % 页眉居中显示项目名称
 \cfoot{\thepage}
 
-%% Title page generator
-\newcommand{\maketitlepage}{%
-  \thispagestyle{empty}% 首页无页眉页脚
-  % 页面上边距1.50cm、下边距1.75cm 起始位置控制（相对版心）
-  \newgeometry{top=1.50cm,bottom=1.75cm,left=3.17cm,right=3.17cm}% 首页特殊边距
-  \vspace*{4\baselineskip}% 和最上面空4行
-  \begin{center}
-    \AI@linespaceonetwofive
-    {\TitleCJK\fontsize{22.0pt}{27.5pt}\selectfont\bfseries \CompetitionName\par}% 方正小标宋简体 二号 加粗 行距1.25倍
-    \vspace{10\baselineskip}% 空10行
-    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries [\ProjectName]\par}% [项目名称] Times、宋体 小二 加粗 行距1.25
-    \vspace{1\baselineskip}% 空1行
-    {\CJKfamily{\AI@CJKMain}\fontsize{18.0pt}{22.5pt}\selectfont\bfseries 项目文档\par}% 宋体 小二 加粗 行距1.25
-    \vspace{0pt}% 空0行
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries 版本号码：[\ProjectVersion]\par}% Times、宋体 小四 加粗 行距1.25
-    \vspace{0pt}% 空0行
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\ProjectDate]\par}% 前3行中空0行
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\TeamName]\par}
-    {\fontsize{12.0pt}{15.0pt}\selectfont\bfseries [\CategoryName]\par}
-  \end{center}
-  \clearpage
-  \restoregeometry% 恢复正常页面边距
+% Redefine \maketitle command (similar to cumcmthesis)
+\renewcommand{\maketitle}{\par
+	\begingroup
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    \endgroup
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
 }
 
-%% TOC styling
-%% "目录" 标题：宋体 二号 行距2.4
+\def\@maketitle{%
+  \newpage
+  \null
+  \thispagestyle{empty}
+  % Title page layout matching figure 2
+  \vspace*{5\baselineskip}
+  \begin{center}
+    % Competition title
+    {\CJKfamily{\AI@CJKMain}\fontsize{16pt}{24pt}\selectfont\bfseries \cpipc@competition@title\par}
+    \vspace{8\baselineskip}
+    
+    % Project title area
+    {\CJKfamily{\AI@CJKMain}\fontsize{14pt}{21pt}\selectfont\bfseries [\cpipc@tokens@title]\par}
+    \vspace{2\baselineskip}
+    
+    % Project document text
+    {\CJKfamily{\AI@CJKMain}\fontsize{14pt}{21pt}\selectfont\bfseries 项目文档\par}
+    \vspace{1\baselineskip}
+    
+    % Additional info
+    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont 版本号码：\cpipc@tokens@version\par}
+    \vspace{0.5\baselineskip}
+    
+    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont [\cpipc@tokens@teamname]\par}
+    \vspace{0.3\baselineskip}
+    
+    {\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont [\cpipc@tokens@category]\par}
+  \end{center}
+  \vfill
+  \clearpage
+}
+
+%% TOC styling (参考cumcmthesis)
+\renewcommand{\cftsecdotsep}{4.5}
+\setlength{\cftbeforesecskip}{7pt}
+\setlength{\cftbeforesubsecskip}{3pt}
+\renewcommand{\cftsecfont}{\bfseries\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{14pt}\selectfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+\renewcommand{\cftsecaftersnumb}{\hskip.4em}
+
+%% 简化的目录命令
 \newcommand{\makemycontents}{%
-  \thispagestyle{fancy}% 目录页有页眉页脚
-  \AI@linespacetwofour
-  {\centering \CJKfamily{\AI@CJKMain}\fontsize{22.0pt}{26pt}\selectfont 目录\par}
-  \vspace{0.8\baselineskip}
-  \AI@linespaceone
-  \renewcommand{\cftsecdotsep}{\cftdotsep} % leader dots
-  \renewcommand{\cftbeforesecskip}{4pt}
-  \renewcommand{\cftsecfont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{14pt}\selectfont\bfseries} % 五号，1级加粗
-  \renewcommand{\cftsecpagefont}{\cftsecfont}
-  \renewcommand{\cftsubsecfont}{\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{14pt}\selectfont} % 1.1级不加粗
-  \renewcommand{\cftsubsecpagefont}{\cftsubsecfont}
   \tableofcontents
   \clearpage
 }
@@ -121,7 +172,7 @@
 %% 记录更改历史：宋体 三号 加粗 居中 行距单倍
 \newcommand{\changehistory}{%
   \thispagestyle{fancy}% 记录更改历史页有页眉页脚
-  \AI@linespaceone
+  \setstretch{1.0}
   {\centering \CJKfamily{\AI@CJKMain}\fontsize{16.0pt}{20pt}\selectfont \bfseries 记录更改历史\par}
   \vspace{12pt}
   % 表格样式：全线表 0.5磅 宋体 五号 居中；表头加粗 居中 段前段后1.54 单倍行距
@@ -150,25 +201,20 @@
 
 %% Headings for 正文
 %% 1 项目概况：宋体 三号 加粗 一级大纲 不缩进 行距1.5
-\titleformat{\section}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{24pt}\selectfont}{\thesection}{0.8em}{}[\vspace{-12pt}]
+\titleformat{\section}{\setstretch{1.5}\CJKfamily{\AI@CJKMain}\bfseries\fontsize{16pt}{24pt}\selectfont}{\thesection}{0.8em}{}[\vspace{-12pt}]
 \titlespacing*{\section}{0pt}{12pt}{6pt}
 
 %% 1.1 背景和基础：宋体 四号 加粗 二级大纲 不缩进 行距1.5
-\titleformat{\subsection}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{21pt}\selectfont}{\thesubsection}{0.6em}{}[\vspace{-12pt}]
+\titleformat{\subsection}{\setstretch{1.5}\CJKfamily{\AI@CJKMain}\bfseries\fontsize{14pt}{21pt}\selectfont}{\thesubsection}{0.6em}{}[\vspace{-12pt}]
 \titlespacing*{\subsection}{0pt}{12pt}{6pt}
 
-%% 正文：宋体 五号 正文 两端对齐 行距1.5
-\newcommand{\BodyText}{\AI@linespaceonefive\CJKfamily{\AI@CJKMain}\fontsize{10.5pt}{15.75pt}\selectfont\justifying}
-
-%% 段落缩进控制：第一段不缩进，后续段落缩进
-\newcommand{\FirstParagraph}{\noindent}
-\newcommand{\NextParagraph}{\par\indent}
+%% 正文样式已移除，使用标准LaTeX命令
 
 %% Helper to switch page numbering after 3 pages
-\newcounter{AI@frontpages}\setcounter{AI@frontpages}{3}
+\newcounter{cpipc@frontpages}\setcounter{cpipc@frontpages}{3}
 \AtBeginDocument{%
-  \pagenumbering{roman}% 前三页使用罗马数字
-  \setcounter{page}{1}% 从i开始
+  \pagenumbering{Roman}% 前三页使用大写罗马数字
+  \setcounter{page}{1}% 从I开始
 }
 \newcommand{\startmain}{%
   \clearpage
@@ -176,7 +222,15 @@
   \setcounter{page}{1}% 重新从1开始
 }
 
-%% Ensure TOC fonts are CJK/TNR mixed via main font settings (xeCJK takes care of CJK vs Latin)
+%% Bibliography settings for BibTeX support
+\RequirePackage{etoolbox}
+\AtBeginEnvironment{thebibliography}{%
+    \phantomsection
+    % 只有当\refname不为空时才添加到目录
+    \ifx\refname\empty\else
+        \addcontentsline{toc}{section}{\refname}
+    \fi
+}
 
 %% Paragraph indent etc.
 \setlength{\parindent}{2em}
